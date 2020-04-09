@@ -20,16 +20,18 @@ const Payment = ({ userInfo }) => {
       type: "card",
       card: elements.getElement(CardElement),
       billing_details: {
-        email: "wardsean15@gmail.com",
+        // email: "wardsean15@gmail.com",
+        email: "tc@threeceemedia.com",
       },
     });
 
-    function stripePaymentMethodHandler(result, email) {
+    async function stripePaymentMethodHandler(result, email) {
       if (result.error) {
+        console.error("stripePaymentMethodHandler error: ", result.error);
       } else {
         // Otherwise send paymentMethod.id to your server
-        fetch("/create-customer", {
-          method: "post",
+        fetch("/membership/create-customer", {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             email: email,
@@ -53,11 +55,14 @@ const Payment = ({ userInfo }) => {
                     if (result.error) {
                       // Display error message in your UI.
                       // The card was declined (i.e. insufficient funds, card has expired, etc)
+                      console.error("PAYMENT ERROR!")
                     } else {
+                      console.log("PAYMENT SUCCESS!")
                       // Show a success message to your customer
                     }
                   });
               } else {
+                  console.log("PAYMENT SUCCESS!")
                 // No additional information was needed
                 // Show a success message to your customer
               }
@@ -66,7 +71,7 @@ const Payment = ({ userInfo }) => {
       }
     }
 
-    stripePaymentMethodHandler(result);
+    const results = await stripePaymentMethodHandler(result);
   };
 
   return (

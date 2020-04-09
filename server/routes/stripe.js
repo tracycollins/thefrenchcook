@@ -9,6 +9,8 @@ const stripe = require("stripe")(STRIPE_SECRET);
 
 /* GET users listing. */
 router.post("/create-customer", async (req, res) => {
+
+  console.log("POST create-customer");
   // This creates a new Customer and attaches the PaymentMethod in one API call.
   const customer = await stripe.customers.create({
     payment_method: req.body.payment_method,

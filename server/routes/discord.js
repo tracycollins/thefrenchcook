@@ -43,18 +43,24 @@ router.get(
       }
     );
 
-    const json = await response.json();
+    try{
+      const json = await response.json();
 
-    const fetchUser = await fetch("https://discordapp.com/api/users/@me", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${json.access_token}`,
-      },
-    });
+      const fetchUser = await fetch("https://discordapp.com/api/users/@me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${json.access_token}`,
+        },
+      });
 
-    const userInfo = await fetchUser.json();
-    if (userInfo && userInfo.email) _userInfo = { ...userInfo };
-    res.json({ userInfo });
+      const userInfo = await fetchUser.json();
+      if (userInfo && userInfo.email) _userInfo = { ...userInfo };
+      res.json({ userInfo });
+    }
+    catch(err){
+      console.error(err);
+      throw err;
+    }
   })
 );
 
